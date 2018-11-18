@@ -1,3 +1,3 @@
 # deepBayNet
 
-Trying random stuff
+Trying bayesian random stuff

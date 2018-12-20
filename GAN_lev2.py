@@ -171,8 +171,8 @@ class GAN(object):
 if __name__ == '__main__':
     #load data
 
-    h5_TTfile = h5py.File('./DataEli/simulatedTT.h5')
-    h5_Vfile = h5py.File('./DataEli/simulatedV.h5')
+    h5_TTfile = h5py.File('./DataEli/simulatedTT50k.h5')
+    h5_Vfile = h5py.File('./DataEli/simulatedV50k.h5')
 
     TTdata = h5_TTfile.get('travel_time_Y') # my X
     Vdata = h5_Vfile.get('slowness_X') # my y

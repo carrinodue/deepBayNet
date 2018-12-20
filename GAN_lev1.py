@@ -49,11 +49,11 @@ class GAN(object):
 
     def __generator(self):
         """ Declare generator """
-        # it should generates images in (1,80,50)
+        # it should generates images in (50, 80, 1)
 
         model = Sequential()
         # FC 1: 12,20,16
-        model.add(Dense(3840, input_shape=(100,)))
+        model.add(Dense(3840, input_shape=(729,)))
         model.add(Reshape((12, 20, 16)))
         model.add(BatchNormalization(momentum=0.8))
         model.add(LeakyReLU(alpha=0.2)) #
@@ -74,7 +74,7 @@ class GAN(object):
 
     def __discriminator(self):
         """ Declare discriminator """
-        # classifies images in (1,80,50)
+        # classifies images in (50, 80, 1)
         model = Sequential()
         # Conv 1: 40,25,32
         model.add(Conv2D(32, kernel_size=5, strides=2, padding='same', input_shape=(50, 80, 1)))
@@ -94,7 +94,7 @@ class GAN(object):
         # Output
         model.add(Dense(1, activation='sigmoid'))
 
-        # model.summary()
+        model.summary()
 
         return model
 
@@ -108,7 +108,7 @@ class GAN(object):
 
         return model
 
-    def train(self, X_train, y_train, scaler_X, scaler_y, epochs=20000, batch=32, save_interval=100):
+    def train(self, X_train, y_train, scaler_X, scaler_y, epochs=100000, batch=32, save_interval=5000):
 
         for cnt in range(epochs):
 
@@ -116,7 +116,7 @@ class GAN(object):
             random_index = np.random.randint(0, len(y_train) - batch/2)
             legit_images = y_train[random_index : random_index + batch//2].reshape(batch//2, self.width, self.height, self.channels)
 
-            gen_noise = np.random.normal(0, 1, (batch//2, 100))
+            gen_noise = np.random.normal(0, 1, (batch//2, 729))
             syntetic_images = self.G.predict(gen_noise)
 
             x_combined_batch = np.concatenate((legit_images, syntetic_images))
@@ -127,21 +127,20 @@ class GAN(object):
 
             # train generator
 
-            noise = np.random.normal(0, 1, (batch, 100))
+            noise = np.random.normal(0, 1, (batch, 729))
             y_mislabled = np.ones((batch, 1))
 
             g_loss = self.stacked_generator_discriminator.train_on_batch(noise, y_mislabled)
 
-            print ('epoch: %d, [Discriminator :: d_loss: %f], [ Generator :: loss: %f]' % (cnt, d_loss[0], g_loss))
-
             if cnt % save_interval == 0:
+                print('epoch: %d, [Discriminator :: d_loss: %f], [ Generator :: loss: %f]' % (cnt, d_loss[0], g_loss))
                 self.plot_images(save2file=True, step=cnt)
 
 
     def plot_images(self, save2file=False, samples=1, step=0):
         ''' Plot and generated images '''
-        filename = "./imagesEli/slowness_%d.png" % step
-        noise = np.random.normal(0, 1, (samples, 100))
+        filename = "./imagesEli/50k_slowness_%d.png" % step
+        noise = np.random.normal(0, 1, (samples, 729))
 
         image = self.G.predict(noise)
 
@@ -165,8 +164,8 @@ class GAN(object):
 if __name__ == '__main__':
     #load data
 
-    h5_TTfile = h5py.File('./DataEli/simulatedTT.h5')
-    h5_Vfile = h5py.File('./DataEli/simulatedV.h5')
+    h5_TTfile = h5py.File('./DataEli/simulatedTT50k.h5')
+    h5_Vfile = h5py.File('./DataEli/simulatedV50k.h5')
 
     TTdata = h5_TTfile.get('travel_time_Y') # my X
     Vdata = h5_Vfile.get('slowness_X') # my y
@@ -194,7 +193,7 @@ if __name__ == '__main__':
     # Preprocessing: train_test_split...
     test_size = 0.20
     seed = 46
-    X_train, X_test, Y_train, Y_test = train_test_split(TTdata, Vdata, test_size=test_size, shuffle=False)#random_state=seed)
+    X_train, X_test, Y_train, Y_test = train_test_split(TTdata, Vdata, test_size=test_size, random_state=seed)
 
     # ...and normalization
     scaler_X = RobustScaler()

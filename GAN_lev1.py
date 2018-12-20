@@ -188,7 +188,7 @@ if __name__ == '__main__':
     cbar = fig.colorbar(cax, ticks=[-1, 0, 1])
     cbar.ax.set_yticklabels(['< -1', '0', '> 1'])  # vertically oriented colorbar
 
-    filename = "./imagesEli/slowness_sample_before_prep.png"
+    filename = "./imagesEli/y_sample_before_prep.png"
     plt.savefig(filename)
 
     # Preprocessing: train_test_split...
@@ -215,7 +215,7 @@ if __name__ == '__main__':
     cbar = fig.colorbar(cax, ticks=[-1, 0, 1])
     cbar.ax.set_yticklabels(['< -1', '0', '> 1'])  # vertically oriented colorbar
 
-    filename = "./imagesEli/slowness_sample_after_prep.png"
+    filename = "./imagesEli/y_sample_after_prep.png"
     plt.savefig(filename)
 
 

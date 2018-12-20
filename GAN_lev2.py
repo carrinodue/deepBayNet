@@ -137,10 +137,11 @@ class GAN(object):
 
             g_loss2 = self.stacked_generator_discriminator.train_on_batch(noise, y_mislabled)
 
-            print('epoch: %d, [Discriminator :: d_loss: %f], [ Generator (alone) :: loss: %f], '
-                  '[ Generator :: loss: %f]' % (cnt, d_loss[0], g_loss1, g_loss2))
+
 
             if cnt % save_interval == 0:
+                print('epoch: %d, [Discriminator :: d_loss: %f], [ Generator (alone) :: loss: %f], '
+                      '[ Generator :: loss: %f]' % (cnt, d_loss[0], g_loss1, g_loss2))
                 self.plot_images(save2file=True, step=cnt)
 
 

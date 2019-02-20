@@ -58,8 +58,8 @@ class GAN(object):
         model.add(BatchNormalization(momentum=0.8))
         model.add(LeakyReLU(alpha=0.2)) #
 
-        # Conv 1: 24,40,32
-        model.add(Conv2DTranspose(32, (5, 5), strides=2, padding='same'))
+        # Conv 1: 24,40, 8
+        model.add(Conv2DTranspose(8, (5, 5), strides=2, padding='same'))
         model.add(BatchNormalization(momentum=0.8))
         model.add(LeakyReLU(alpha=0.2))
 
@@ -77,11 +77,11 @@ class GAN(object):
         # classifies images in (50, 80, 1)
         model = Sequential()
         # Conv 1: 40,25,32
-        model.add(Conv2D(32, kernel_size=5, strides=2, padding='same', input_shape=(50, 80, 1)))
+        model.add(Conv2D(16, kernel_size=5, strides=2, padding='same', input_shape=(50, 80, 1)))
         model.add(LeakyReLU(alpha=0.2))
 
         # Conv 2: 20,13,16
-        model.add(Conv2D(16, kernel_size=5, strides=2, padding='same'))
+        model.add(Conv2D(32, kernel_size=5, strides=2, padding='same'))
         model.add(BatchNormalization(momentum=0.8))
         model.add(LeakyReLU(alpha=0.2))
 
